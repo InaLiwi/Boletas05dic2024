@@ -6,4 +6,5 @@ class BoletaForm(forms.ModelForm):
         model = breakpointoleta
         fields = ['cliente', 'descripcion', 'prioridad', 'estado', 'tecnico_asignado']
 
-
+class ProductoForm(forms.ModelForm):
+    pass
