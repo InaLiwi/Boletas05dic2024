@@ -1,0 +1,37 @@
+<div class="card mt-5">
+    <div class="card-header">
+        <h4>Formulario de Producto</h4>
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post" class="mt-3">
+            {% csrf_token %}
+            {% for campo in formulario %}
+            <div class="mb-3">
+                <label for="{{campo.id}}" class="form-label">{{campo.label}}</label>
+                <input 
+                    type="{{campo.field.widget.input_type}}" 
+                    class="form-control {% if campo.errors %}is-invalid{% endif %}"
+                    name="{{campo.name}}" 
+                    id="{{campo.id}}" 
+                    placeholder="{{campo.label}}" 
+                    required
+                />
+                {% if campo.errors %}
+                <div class="invalid-feedback">
+                    {{ campo.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <div class="row justify-content-evenly">
+                <a class="btn col-3" href="{% url 'salas' %}" role="button"> Cancelar </a>  
+                <input class="btn col-3" type="reset" value="Borrar cambios"/>
+                <input class="btn col-3" type="submit" value="Guardar"/>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        ¡Formulario listo para completar!
+    </div>
+</div>

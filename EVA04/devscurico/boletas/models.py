@@ -19,7 +19,8 @@ class Producto:
     stock = models.IntegerField()
 
     def __str__(self):
-        return f"ID: {self.id_producto} | Nombre: {self.nombre} | Descripción: {self.descripcion} | Precio: ${self.precio} | Categoria: {self.categoria} | Stock: {self.stock}"
+        return f"ID: {self.id_producto} | Nombre: {self.nombre} | Descripción: {self.descripcion} | Precio: ${self.precio} | Categoría: {self.categoria} | Stock: {self.stock}"
+    
     
 
 class Boleta:
@@ -28,6 +29,8 @@ class Boleta:
 
     def __str__(self):
         return f"ID Boleta: {self.id_boleta} | Cliente: {self.cliente}"
+
+
 
 class BoletaProducto :
     id_boleta = models.ForeignKey('Boleta', on_delete=models.CASCADE)
