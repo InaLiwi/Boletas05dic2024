@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Informes - DEVSCURICO{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h1 class="h3 mb-0">
+            <i class="fas fa-chart-bar me-2"></i>Informes
+        </h1>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title mb-0">Resumen de boletas</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Total de boletas:</strong> {{ total_boletas }}</p>
+                        <p class="card-text"><strong>boletas resueltos:</strong> {{ boletas_resueltos }}</p>
+                        <p class="card-text"><strong>Tiempo promedio de resolución:</strong> {{ tiempo_promedio_resolucion|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">boletas por Técnico</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for tecnico in boletas_por_tecnico %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ tecnico.tecnico_asignado__username|default:"Sin asignar" }}
+                                <span class="badge bg-primary rounded-pill">{{ tecnico.total }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

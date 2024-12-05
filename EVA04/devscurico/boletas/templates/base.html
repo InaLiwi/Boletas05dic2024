@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DEVSCURICO - Sistema de boletas{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a5f7a;
+            --secondary-color: #2d2d2d;
+            --accent-color: #ffa500;
+            --background-color: #f4f4f4;
+            --text-color: #333333;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: #12465a;
+            border-color: #12465a;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 8px;
+        }
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        footer {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+        footer h5 {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        footer ul li {
+            margin-bottom: 10px;
+        }
+        footer a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: var(--accent-color);
+        }
+        .footer-bottom {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px 0;
+            margin-top: 30px;
+        }
+        .social-icons a {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'inicio' %}">
+                <i class="fas fa-boleta-alt me-2"></i>DEVSCURICO
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if perms.boletas.view_boleta %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lista_boletas' %}"><i class="fas fa-list me-1"></i>boletas</a>
+                    </li>
+                    {% endif %}
+                    {% if perms.boletas.add_boleta %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'crear_boleta' %}"><i class="fas fa-plus me-1"></i>Crear boleta</a>
+                    </li>
+                    {% endif %}
+                    {% if user.groups.all.0.name == 'Administradores' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'informes' %}"><i class="fas fa-chart-bar me-1"></i>Informes</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link"><i class="fas fa-user me-1"></i>{{ user.username }} ({{ user.groups.all.0.name }})</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i>Cerrar sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-1"></i>Iniciar sesión</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>DEVSCURICO</h5>
+                    <p>Soluciones de soporte técnico innovadoras para impulsar tu negocio.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'inicio' %}">Inicio</a></li>
+                        <li><a href="{% url 'lista_boletas' %}">boletas</a></li>
+                        {% if perms.boletas.add_boleta %}
+                        <li><a href="{% url 'crear_boleta' %}">Crear boleta</a></li>
+                        {% endif %}
+                        {% if user.groups.all.0.name == 'Administradores' %}
+                        <li><a href="{% url 'informes' %}">Informes</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contacto</h5>
+                    <p><i class="fas fa-envelope mr-2"></i> soporte@devscurico.com</p>
+                    <p><i class="fas fa-phone mr-2"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-map-marker-alt mr-2"></i> Curicó, Chile</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="mb-0">&copy; 2024 DEVSCURICO. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
