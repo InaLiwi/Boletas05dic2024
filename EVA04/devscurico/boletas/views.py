@@ -42,6 +42,7 @@ def eliminar_boleta(request, boleta_id):
 
 
 ''' ------ NO BORRAR ----- ES NUESTRA FUNCIÓN SECRETA SUPER ESPECIAL
+# GENERAR INFORMES DE VENTAS
 @login_required
 @permission_required('boletas.view_boleta', raise_exception=True)
 def informes(request):
