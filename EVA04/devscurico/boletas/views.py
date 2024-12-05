@@ -28,14 +28,28 @@ def crear_productos(request):
             return redirect('listar_productos')
 
 @login_required
-@permission_required('boletas.change_boleta', raise_exception=True)
-def actualizar_boleta(request, boleta_id):
-   pass
+@permission_required('producto.change_producto', raise_exception=True)
+def actualizar_producto(request, id_producto):
+    # Vista para actualizar un ticket existente
+    producto = get_object_or_404(Producto, id=id_producto)
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, instance=producto)
+        if form.is_valid():
+            producto = form.save()
+            return redirect('detalle_producto', id_producto= producto.id)
+    else:
+        form = ProductoForm(instance=producto)
+    return render(request, 'productos/actualizar_producto.html', {'form': form, 'producto': producto})
 
 @login_required
-@permission_required('boletas.delete_boleta', raise_exception=True)
-def eliminar_boleta(request, boleta_id):
-    pass
+@permission_required('producto.delete_producto', raise_exception=True)
+def eliminar_producto(request, id_producto):
+    # Vista para eliminar un ticket
+    producto = get_object_or_404(Producto, id=id_producto)
+    if request.method == 'POST':
+        producto.delete()
+        return redirect('lista_productos')
+    return render(request, 'productos/eliminar_producto.html', {'producto': producto})
 
 
 
