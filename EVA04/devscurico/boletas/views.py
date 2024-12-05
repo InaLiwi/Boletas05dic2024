@@ -17,6 +17,11 @@ def lista_boleta(request):
     boletas = Boleta.objects.all()
     return render(request, 'boletas/listar_boletas.html',{'boletas': boletas})
 
+
+# ¿hacemos que se creen las boletas automáticamente?
+# Aunque lo automático debería ser boletaproducto, cada vez que se agregue un producto (boletaproducto es como el carrito de compras)
+
+
 @login_required
 @permission_required('boletas.add_boleta', raise_exception=True)
 def crear_productos(request):
