@@ -7,18 +7,24 @@ from django.core.exceptions import PermissionDenied
 from .models import *
 from .forms import *
 
+# --- Inicio (Todos) --- #
 @login_required
 def inicio(request):
-    return render(request, 'boletas/inicio.html')
+    return render(request, 'paginas/inicio.html')
 
+# --- Ubicacion (Todos) --- #
 @login_required
-@permission_required('boletas.view_boleta', raise_exception=True)
-def lista_boleta(request):
-    boletas = Boleta.objects.all()
-    return render(request, 'boletas/listar_boletas.html',{'boletas': boletas})
+def ubicacion(request):
+    return render(request, 'paginas/ubicacion.html')
 
+# --- Productos (Todos) --- #
 @login_required
-@permission_required('boletas.add_boleta', raise_exception=True)
+def listar_productos(request):
+    return render(request, 'productos/listar_productos.html')
+
+# ---- Productos (Trabajador - administrador) ---- #
+@login_required
+@permission_required('productos.add_producto', raise_exception=True)
 def crear_productos(request):
     if request.method == 'POST':
         form = BoletaForm(request.POST)
@@ -52,16 +58,31 @@ def eliminar_producto(request, id_producto):
     return render(request, 'productos/eliminar_producto.html', {'producto': producto})
 
 
+# --- Boleta (Cliente) --- #
+@login_required
+@permission_required('boletas.view_boleta', raise_exception=True)
+def lista_boleta(request):
+    boletas = Boleta.objects.all()
+    return render(request, 'boletas/listar_boletas.html',{'boletas': boletas})
+
+# --- Agregar compra (Todos) --- #
 
 
 
-''' ------ NO BORRAR ----- ES NUESTRA FUNCIÓN SECRETA SUPER ESPECIAL
+
+
+# --- Informe Ventas (Administrador) --- #
 @login_required
 @permission_required('boletas.view_boleta', raise_exception=True)
 def informes(request):
     # Vista para generar informes, solo accesible por administradores
     if not request.user.groups.filter(name='Administradores').exists():
         raise PermissionDenied
+
+
+
+
+''' ------ NO BORRAR ----- ES NUESTRA FUNCIÓN SECRETA SUPER ESPECIAL
     
     # Cálculo de estadísticas para el informe
     total_boletas = boleta.objects.count()
