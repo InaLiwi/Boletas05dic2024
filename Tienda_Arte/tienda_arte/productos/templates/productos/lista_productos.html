@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Productos - Tienda de Arte{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-3xl font-bold text-art-primary mb-6 text-center">Nuestros Productos</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for producto in productos %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+            <a href="{% url 'detalle_producto' producto.id %}">
+                <div class="aspect-w-1 aspect-h-1 w-full">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="w-full h-64 object-cover">
+                    {% else %}
+                        <div class="w-full h-64 bg-art-secondary flex items-center justify-center">
+                            <i class="fas fa-image text-4xl text-art-primary"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-art-primary mb-2">{{ producto.nombre }}</h3>
+                    <p class="text-gray-600 mb-2">{{ producto.descripcion|truncatewords:20 }}</p>
+                    <p class="text-lg font-bold text-art-accent mb-2">${{ producto.precio }}</p>
+                    <p class="text-sm text-gray-500 mb-4">
+                        <i class="fas fa-box mr-2"></i>Stock: {{ producto.stock }}
+                    </p>
+                    <div class="flex justify-between">
+                        <a href="{% url 'detalle_producto' producto.id %}" class="bg-art-primary hover:bg-art-secondary text-white hover:text-art-primary font-bold py-2 px-4 rounded transition duration-300">
+                            <i class="fas fa-eye mr-2"></i>Ver detalles
+                        </a>
+                        <a href="{% url 'agregar_al_carrito' producto.id %}" class="bg-art-accent hover:bg-art-secondary text-white hover:text-art-primary font-bold py-2 px-4 rounded transition duration-300">
+                            <i class="fas fa-cart-plus mr-2"></i>Agregar
+                        </a>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}
+

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ producto.nombre }} - Tienda de Arte{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="md:flex">
+        <div class="md:flex-shrink-0">
+            {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="h-96 w-full object-cover md:w-96">
+            {% else %}
+                <div class="h-96 w-full md:w-96 bg-art-secondary flex items-center justify-center">
+                    <i class="fas fa-image text-6xl text-art-primary"></i>
+                </div>
+            {% endif %}
+        </div>
+        <div class="p-8">
+            <div class="uppercase tracking-wide text-sm text-art-accent font-semibold">{{ producto.categoria }}</div>
+            <h1 class="mt-1 text-4xl font-bold text-art-primary">{{ producto.nombre }}</h1>
+            <p class="mt-2 text-gray-600">{{ producto.descripcion }}</p>
+            <div class="mt-4 flex items-center">
+                <span class="text-3xl font-bold text-art-accent">${{ producto.precio }}</span>
+                <span class="ml-2 text-sm text-gray-500">
+                    <i class="fas fa-box mr-1"></i>Stock: {{ producto.stock }}
+                </span>
+            </div>
+            <form method="post" action="{% url 'agregar_al_carrito' producto.id %}" class="mt-6">
+                {% csrf_token %}
+                <div class="flex items-center mb-4">
+                    <label for="cantidad" class="mr-2 text-gray-700">Cantidad:</label>
+                    <input type="number" id="cantidad" name="cantidad" value="1" min="1" max="{{ producto.stock }}" class="w-16 px-2 py-1 border rounded">
+                </div>
+                <button type="submit" class="bg-art-accent hover:bg-art-secondary text-white hover:text-art-primary font-bold py-2 px-4 rounded transition duration-300">
+                    <i class="fas fa-cart-plus mr-2"></i>Agregar al carrito
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

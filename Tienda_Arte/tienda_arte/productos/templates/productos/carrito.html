@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Carrito - Tienda de Arte{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-lg rounded-lg p-6">
+    <h1 class="text-3xl font-bold text-art-primary mb-6">Tu Carrito</h1>
+    {% if orden.detalleorden_set.all %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-art-primary uppercase bg-art-secondary">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Producto</th>
+                        <th scope="col" class="px-6 py-3">Precio</th>
+                        <th scope="col" class="px-6 py-3">Cantidad</th>
+                        <th scope="col" class="px-6 py-3">Subtotal</th>
+                        <th scope="col" class="px-6 py-3">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detalle in orden.detalleorden_set.all %}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <div class="flex items-center">
+                                {% if detalle.producto.imagen %}
+                                    <img class="w-10 h-10 rounded-full mr-2" src="{{ detalle.producto.imagen.url }}" alt="{{ detalle.producto.nombre }}">
+                                {% else %}
+                                    <div class="w-10 h-10 rounded-full mr-2 bg-art-secondary flex items-center justify-center">
+                                        <i class="fas fa-image text-art-primary"></i>
+                                    </div>
+                                {% endif %}
+                                {{ detalle.producto.nombre }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">${{ detalle.producto.precio }}</td>
+                        <td class="px-6 py-4">
+                            <form method="post" action="{% url 'ajustar_cantidad_carrito' detalle.id %}" class="flex items-center">
+                                {% csrf_token %}
+                                <input type="number" name="cantidad" value="{{ detalle.cantidad }}" min="1" max="{{ detalle.producto.stock }}" class="w-16 rounded border-gray-300 mr-2">
+                                <button type="submit" class="text-art-primary hover:text-art-accent">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                        <td class="px-6 py-4">${{ detalle.subtotal }}</td>
+                        <td class="px-6 py-4">
+                            <form method="post" action="{% url 'ajustar_cantidad_carrito' detalle.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="cantidad" value="0">
+                                <button type="submit" class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-6 text-right">
+            <p class="text-2xl font-bold text-art-primary">Total: ${{ orden.total }}</p>
+            <a href="{% url 'completar_orden' %}" class="mt-4 bg-art-accent hover:bg-art-secondary text-white hover:text-art-primary font-bold py-2 px-4 rounded inline-block transition duration-300">
+                <i class="fas fa-check-circle mr-2"></i>Completar orden
+            </a>
+        </div>
+    {% else %}
+        <p class="text-center text-gray-600">Tu carrito está vacío.</p>
+        <div class="text-center mt-4">
+            <a href="{% url 'lista_productos' %}" class="bg-art-primary hover:bg-art-secondary text-white hover:text-art-primary font-bold py-2 px-4 rounded inline-block transition duration-300">
+                <i class="fas fa-shopping-bag mr-2"></i>Ver productos
+            </a>
+        </div>
+    {% endif %}
+</div>
+<br>
+<br>
+{% endblock %}
+
